@@ -1,0 +1,88 @@
+/* 	CSS voor Frituur Frida 
+	Servlets & JSP oefening 
+	Steve Schoonooghe
+*/
+
+body {
+	color:red;
+	background-color: #ff80c0;
+}
+
+h1 {
+	color:#ff0000;
+}
+
+.open {
+	color:green;
+}
+
+.gesloten {
+	color:red;
+}
+
+label span, .fout {
+	background-color: red;
+	border-bottom-right-radius: 0.5em;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	box-shadow: 5px 5px #777777;
+	margin-left: 6em;
+	padding: 0.5em;
+	color: white;
+}
+
+label span:empty, .fout:empty {
+	display: none;
+}
+
+label span {
+	margin-left: 6em;
+}
+
+label {
+	cursor: pointer;
+}
+
+nav ul {
+	background-color: #007ebb;
+	padding: 0.4em 0;
+}
+
+nav li {
+	display: inline;
+}
+
+nav li a {
+	color: white;
+	font-weight: bold;
+	padding-left: 0.5em;
+	text-decoration: none;
+	vertical-align: middle;
+}
+
+nav li a:hover {
+	color: #F7FFCC;
+}
+
+ul.zebra {
+	list-style: none;
+	padding: 0;
+}
+
+ul.zebra li {
+	padding-left: 0.5em;
+	padding-bottom: 0.1em;
+	padding-top: 0.1em;
+}
+
+ul.zebra li:nth-child(odd) {
+	background-color: #F2F2E4;
+}
+
+ul.zebra li:nth-child(even) {
+	background-color: #E6E6C8;
+}
+
+ul.zebra li:nth-child(odd):hover, ul.zebra li:nth-child(even):hover {
+	background-color: #ccff00;
+}
