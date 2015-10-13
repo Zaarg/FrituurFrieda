@@ -23,33 +23,35 @@ import javax.servlet.http.HttpServletRequest;
  */
 @WebFilter("*.htm")
 public class FrietFilter implements Filter {
-	
+
 	private final static String STATISTIEK = "statistiek";
-	
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 		if (request instanceof HttpServletRequest) {
-		    HttpServletRequest httprequest = (HttpServletRequest) request;
+			HttpServletRequest httprequest = (HttpServletRequest) request;
 			String url = httprequest.getRequestURI();
-		    int index = url.indexOf(";jsessionid=");
-		    if (index != -1) {
-		        url = url.substring(0, index);
-		    }
-		    @SuppressWarnings("unchecked")
-		    ConcurrentHashMap<String, AtomicInteger> statistiek = (ConcurrentHashMap<String, AtomicInteger>) request.getServletContext().getAttribute(STATISTIEK);
-		    AtomicInteger aantalReedsAanwezig = statistiek.putIfAbsent(url, new AtomicInteger(1));
-		    if (aantalReedsAanwezig != null) {
-		    	aantalReedsAanwezig.incrementAndGet();
-		    }
+			int index = url.indexOf(";jsessionid=");
+			if (index != -1) {
+				url = url.substring(0, index);
+			}
+			@SuppressWarnings("unchecked")
+			ConcurrentHashMap<String, AtomicInteger> statistiek = (ConcurrentHashMap<String, AtomicInteger>) request
+					.getServletContext().getAttribute(STATISTIEK);
+			AtomicInteger aantalReedsAanwezig = statistiek.putIfAbsent(url, new AtomicInteger(1));
+			if (aantalReedsAanwezig != null) {
+				aantalReedsAanwezig.incrementAndGet();
+			}
 		}
-	chain.doFilter(request, response);
+		chain.doFilter(request, response);
 	}
-	
+
 	public void init(FilterConfig fConfig) throws ServletException {
 		fConfig.getServletContext().setAttribute(STATISTIEK, new ConcurrentHashMap<String, AtomicInteger>());
 	}
-	
+
 	public void destroy() {
-		
+
 	}
 
 }

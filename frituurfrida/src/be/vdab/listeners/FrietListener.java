@@ -15,45 +15,50 @@ import javax.servlet.http.HttpServletRequest;
 
 //@WebListener
 public class FrietListener implements ServletRequestListener, ServletContextListener {
-  private final static String STATISTIEK = "statistiek";
-  private final static Set<String> UITGESLOTEN_EXTENSIES = new CopyOnWriteArraySet<>(Arrays.asList("png","gif","jpg","css","js","ico"));
-  
-  @Override
-  public void contextInitialized(ServletContextEvent event) {
-    event.getServletContext().setAttribute(STATISTIEK, new ConcurrentHashMap<String, AtomicInteger>());
-  }
-  
-  @Override
-  public void contextDestroyed(ServletContextEvent event) {
-  } 
-  
-  @Override
-  public void requestInitialized(ServletRequestEvent event) {
-    if (event.getServletRequest() instanceof HttpServletRequest) {
-      HttpServletRequest request = (HttpServletRequest) event.getServletRequest();
-      String url = request.getRequestURI();
-      boolean verwerkRequest = true;
-      int laatstePuntPositie = url.lastIndexOf('.');
-      if (laatstePuntPositie != -1) {
-        String extensie = url.substring(laatstePuntPositie + 1).toLowerCase();
-        if (UITGESLOTEN_EXTENSIES.contains(extensie)) {
-          verwerkRequest = false;
-        }
-      }
-      if (verwerkRequest) {
-        int index = url.indexOf(";jsessionid=");
-        if (index != -1) {
-          url = url.substring(0, index);
-        }
-        @SuppressWarnings("unchecked")
-        ConcurrentHashMap<String, AtomicInteger> statistiek = (ConcurrentHashMap<String, AtomicInteger>) request.getServletContext().getAttribute(STATISTIEK);
-        AtomicInteger aantalReedsAanwezig = statistiek.putIfAbsent(url, new AtomicInteger(1));
-        if (aantalReedsAanwezig != null) {
-          aantalReedsAanwezig.incrementAndGet();
-        }
-      }
-    }
-  }
-  @Override public void requestDestroyed(ServletRequestEvent event) {}
+	private final static String STATISTIEK = "statistiek";
+	private final static Set<String> UITGESLOTEN_EXTENSIES = new CopyOnWriteArraySet<>(
+			Arrays.asList("png", "gif", "jpg", "css", "js", "ico"));
 
-} 
+	@Override
+	public void contextInitialized(ServletContextEvent event) {
+		event.getServletContext().setAttribute(STATISTIEK, new ConcurrentHashMap<String, AtomicInteger>());
+	}
+
+	@Override
+	public void contextDestroyed(ServletContextEvent event) {
+	}
+
+	@Override
+	public void requestInitialized(ServletRequestEvent event) {
+		if (event.getServletRequest() instanceof HttpServletRequest) {
+			HttpServletRequest request = (HttpServletRequest) event.getServletRequest();
+			String url = request.getRequestURI();
+			boolean verwerkRequest = true;
+			int laatstePuntPositie = url.lastIndexOf('.');
+			if (laatstePuntPositie != -1) {
+				String extensie = url.substring(laatstePuntPositie + 1).toLowerCase();
+				if (UITGESLOTEN_EXTENSIES.contains(extensie)) {
+					verwerkRequest = false;
+				}
+			}
+			if (verwerkRequest) {
+				int index = url.indexOf(";jsessionid=");
+				if (index != -1) {
+					url = url.substring(0, index);
+				}
+				@SuppressWarnings("unchecked")
+				ConcurrentHashMap<String, AtomicInteger> statistiek = (ConcurrentHashMap<String, AtomicInteger>) request
+						.getServletContext().getAttribute(STATISTIEK);
+				AtomicInteger aantalReedsAanwezig = statistiek.putIfAbsent(url, new AtomicInteger(1));
+				if (aantalReedsAanwezig != null) {
+					aantalReedsAanwezig.incrementAndGet();
+				}
+			}
+		}
+	}
+
+	@Override
+	public void requestDestroyed(ServletRequestEvent event) {
+	}
+
+}
